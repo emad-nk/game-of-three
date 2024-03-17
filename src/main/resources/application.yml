@@ -25,15 +25,35 @@ spring:
     username: user
     password: pass
 
+# Ideally the key and secret should be put under AWS system manager (i.e. parameter store) and utilised via K8s ExternalSecret
+pusher:
+  app-id: "1772483"
+  key: "77e17a03eb10e787fa01"
+  secret: "117c209ca87550fbff8e"
+  cluster: "eu"
+  channel-prefixes:
+    - got.com
 
 --- ########################################################################
 spring.config.activate.on-profile: integration-test
 
+pusher:
+  channel-prefixes:
+    - localhost
+
 --- ########################################################################
 spring.config.activate.on-profile: local
 
+pusher:
+  channel-prefixes:
+    - localhost
+
 --- ########################################################################
 spring.config.activate.on-profile: staging
+
+pusher:
+  channel-prefixes:
+    - got-staging.com
 
 --- ########################################################################
 spring.config.activate.on-profile: prod
