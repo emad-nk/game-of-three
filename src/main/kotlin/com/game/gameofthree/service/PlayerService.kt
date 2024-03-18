@@ -2,7 +2,7 @@ package com.game.gameofthree.service
 
 import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.repository.PlayerRepository
-import com.game.gameofthree.exception.UserNotFoundException
+import com.game.gameofthree.exception.EntityNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,6 +12,6 @@ class PlayerService(
 
     fun findPlayer(username: String): Player {
         return playerRepository.findPlayerByUsername(username)
-            ?: throw UserNotFoundException("User $username not found")
+            ?: throw EntityNotFoundException("Player $username not found")
     }
 }

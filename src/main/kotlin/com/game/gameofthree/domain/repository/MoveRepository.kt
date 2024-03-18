@@ -16,4 +16,15 @@ interface  MoveRepository : JpaRepository<Move, String> {
         """,
     )
     fun getLastThreeMoves(gameId: String): List<Move>
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            select * from move
+            where game_id = :gameId
+            order by timestamp desc
+            limit 1
+        """,
+    )
+    fun getLastMove(gameId: String): Move?
 }

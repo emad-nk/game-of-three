@@ -16,4 +16,14 @@ interface  GameRepository : JpaRepository<Game, String>{
         """,
     )
     fun findOldestGameWithStatusWaiting(): Game?
+
+    @Query(
+        nativeQuery = true,
+        value = """
+            select * from game
+            where status = 'PLAYING'
+            and id = :id
+        """,
+    )
+    fun findAPlayingGame(id: String): Game?
 }

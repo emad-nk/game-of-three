@@ -6,8 +6,6 @@ import com.game.gameofthree.domain.model.GameStatus.WAITING
 import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.liveupdate.UpdateDTO
-import jakarta.persistence.Id
-import java.sql.Timestamp
 import java.time.Instant
 import java.time.Instant.now
 import java.util.UUID.randomUUID
@@ -45,7 +43,7 @@ fun dummyGame(
         playerOne = playerOne,
         playerTwo = playerTwo,
         status = status,
-        winnerId = winnerId,
+        winnerUsername = winnerId,
         createdAt = createdAt,
     )
 

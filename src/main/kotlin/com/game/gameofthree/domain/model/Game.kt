@@ -21,15 +21,17 @@ data class Game(
     val playerTwo: Player? = null,
     @Enumerated(STRING)
     val status: GameStatus = WAITING,
-    val winnerId: String? = null,
+    val winnerUsername: String? = null,
     val createdAt: Instant = now()
 )
 
-fun Game.toDTO(recentMoves: List<Move> = emptyList()): GameDTO {
+fun Game.toDTO(lastMove: Move? = null): GameDTO {
     return GameDTO(
         id = id,
         playerOne = playerOne.toDTO(),
         playerTwo = playerTwo?.toDTO(),
-        recentMoves = recentMoves.map { it.toDTO() }
+        status = status,
+        winnerUsername = winnerUsername,
+        lastMove = lastMove?.toDTO()
     )
 }
