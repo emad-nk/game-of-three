@@ -58,7 +58,9 @@ abstract class IntegrationTestParent {
 
     companion object {
         private val ALL_TABLES = listOf(
-            "user",
+            "move",
+            "game",
+            "player"
         )
     }
 }
