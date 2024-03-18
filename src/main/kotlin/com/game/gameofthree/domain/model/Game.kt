@@ -7,6 +7,8 @@ import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import java.time.Instant
+import java.time.Instant.now
 import java.util.UUID.randomUUID
 
 @Entity
@@ -20,9 +22,10 @@ data class Game(
     @Enumerated(STRING)
     val status: GameStatus = WAITING,
     val winnerId: String? = null,
+    val createdAt: Instant = now()
 )
 
-fun Game.toDTO(recentMoves: List<Move>): GameDTO {
+fun Game.toDTO(recentMoves: List<Move> = emptyList()): GameDTO {
     return GameDTO(
         id = id,
         playerOne = playerOne.toDTO(),

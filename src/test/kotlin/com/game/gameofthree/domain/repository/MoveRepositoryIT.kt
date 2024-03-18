@@ -15,7 +15,7 @@ class MoveRepositoryIT(
 ) : IntegrationTestParent() {
 
     @Test
-    fun `finds the last 3 moves by the gameId`() {
+    fun `finds the last 3 moves by the gameId sorted by latest first`() {
         val player = dummyPlayer(username = "king")
         val game1 = dummyGame(playerOne = player)
         val game2 = dummyGame(playerOne = player)
@@ -28,6 +28,8 @@ class MoveRepositoryIT(
         val move2 = moveRepository.save(dummyMove(player = player, game = game1))
         val move3 = moveRepository.save(dummyMove(player = player, game = game1))
         moveRepository.save(dummyMove(player = player, game = game2))
+
+        assertThat(moveRepository.findAll()).hasSize(5)
 
         val lastThreeMoves = moveRepository.getLastThreeMoves(gameId = game1.id)
 

@@ -38,6 +38,7 @@ fun dummyGame(
     playerTwo: Player? = null,
     status: GameStatus = WAITING,
     winnerId: String? = null,
+    createdAt: Instant = now()
 ): Game =
     Game(
         id = id,
@@ -45,6 +46,7 @@ fun dummyGame(
         playerTwo = playerTwo,
         status = status,
         winnerId = winnerId,
+        createdAt = createdAt,
     )
 
 fun dummyMove(

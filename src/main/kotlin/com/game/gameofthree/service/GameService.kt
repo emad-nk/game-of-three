@@ -16,11 +16,14 @@ class GameService(
 ) {
 
     @Transactional
-    fun start(playerUsername: String, initialValue: Int): GameDTO {
-        val player = playerService.findPlayer(username = playerUsername)
+    fun start(username: String): GameDTO {
+        val player = playerService.findPlayer(username = username)
+        val existingGame = gameRepository.findOldestGameWithStatusWaiting()
+        existingGame?.let {
+            return existingGame.copy(playerTwo = player).toDTO()
+        }
         val game = gameRepository.save(Game(playerOne = player, status = WAITING))
-        val move = listOf(moveService.addFirstMove(player = player, game = game, initialValue = initialValue))
-        return game.toDTO(recentMoves = move)
+        return game.toDTO()
     }
 
 
