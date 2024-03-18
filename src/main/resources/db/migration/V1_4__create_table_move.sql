@@ -1,10 +1,11 @@
 create table if not exists move
 (
-    id        varchar(100)    PRIMARY KEY,
-    value     INTEGER         NOT NULL,
-    timestamp TIMESTAMP       NOT NULL,
-    player_id varchar(100)    NOT NULL,
-    game_id   varchar(100)    NOT NULL,
-    FOREIGN KEY (player_id)   REFERENCES player (id),
-    FOREIGN KEY (game_id)     REFERENCES game (id)
+    id             varchar(100)    primary key,
+    value          integer,
+    current_result integer         not null,
+    timestamp      timestamp       not null,
+    player_id      varchar(100)    not null,
+    game_id        varchar(100)    not null,
+    foreign key (player_id)        references player (id),
+    foreign key (game_id)          references game (id)
 );

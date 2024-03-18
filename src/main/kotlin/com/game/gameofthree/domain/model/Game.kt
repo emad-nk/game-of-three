@@ -1,6 +1,7 @@
 package com.game.gameofthree.domain.model
 
-import com.game.gameofthree.domain.model.GameStatus.STARTED
+import com.game.gameofthree.controller.response.GameDTO
+import com.game.gameofthree.domain.model.GameStatus.WAITING
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
@@ -15,8 +16,17 @@ data class Game(
     @ManyToOne
     val playerOne: Player,
     @ManyToOne
-    val playerTwo: Player,
+    val playerTwo: Player? = null,
     @Enumerated(STRING)
-    val status: GameStatus = STARTED,
+    val status: GameStatus = WAITING,
     val winnerId: String? = null,
 )
+
+fun Game.toDTO(recentMoves: List<Move>): GameDTO {
+    return GameDTO(
+        id = id,
+        playerOne = playerOne.toDTO(),
+        playerTwo = playerTwo?.toDTO(),
+        recentMoves = recentMoves.map { it.toDTO() }
+    )
+}

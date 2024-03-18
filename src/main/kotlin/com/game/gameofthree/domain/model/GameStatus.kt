@@ -1,7 +1,7 @@
 package com.game.gameofthree.domain.model
 
 enum class GameStatus {
-    STARTED,
+    WAITING,
     PLAYING,
     FINISHED
 }
