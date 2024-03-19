@@ -20,12 +20,12 @@ open class LiveUpdateService(private val pusher: Pusher, private val prefixes: L
             val channel = "$prefix-$channelName"
 
             logger.info("Sending notification $eventName to channel $channel")
-            val result = pusher.trigger(channel, eventName, liveUpdate.updateDTO)
+            val result = pusher.trigger(channel, eventName, liveUpdate.gameDTO)
             if (result.status != SUCCESS) {
                 logger.error { "Failure pushing event name $eventName to the channel $channelName" }
             }
             logger.info { "Result [message=${result.message}][status=${result.status}]" }
-            logger.info { "Game update: ${liveUpdate.updateDTO}" }
+            logger.info { "Game update: ${liveUpdate.gameDTO}" }
         }
     }
 

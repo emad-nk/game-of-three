@@ -1,29 +1,56 @@
 package com.game.gameofthree
 
+import com.game.gameofthree.controller.response.GameDTO
+import com.game.gameofthree.controller.response.MoveDTO
+import com.game.gameofthree.controller.response.PlayerDTO
 import com.game.gameofthree.domain.model.Game
 import com.game.gameofthree.domain.model.GameStatus
 import com.game.gameofthree.domain.model.GameStatus.WAITING
 import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.Player
+import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.liveupdate.UpdateDTO
 import java.time.Instant
 import java.time.Instant.now
 import java.util.UUID.randomUUID
 
-fun dummyUpdateDTO(
-    userId: String = randomUUID().toString(),
-    added: Int = 1,
-    resultingNumber: Int = 12,
-): UpdateDTO =
-    UpdateDTO(
-        userId = userId,
-        added = added,
-        resultingNumber = resultingNumber,
+fun dummyGameDTO(
+    id: String = randomUUID().toString(),
+    playerOne: PlayerDTO = dummyPlayer().toDTO(),
+    playerTwo: PlayerDTO? = null,
+    status: GameStatus = WAITING,
+    lastMove: MoveDTO = dummyMoveDTO(),
+    winnerUsername: String? = playerOne.username
+): GameDTO =
+    GameDTO(
+        id = id,
+        playerOne = playerOne,
+        playerTwo = playerTwo,
+        status = status,
+        lastMove = lastMove,
+        winnerUsername = winnerUsername
+    )
+
+fun dummyMoveDTO(
+    id: String = randomUUID().toString(),
+    value: Int? = null,
+    currentResult: Int = 56,
+    player: PlayerDTO = dummyPlayer().toDTO(),
+    gameId: String = randomUUID().toString(),
+    timestamp: Instant = now()
+): MoveDTO =
+    MoveDTO(
+        id = id,
+        value = value,
+        currentResult = currentResult,
+        player = player,
+        gameId = gameId,
+        timestamp = timestamp
     )
 
 fun dummyPlayer(
     id: String = randomUUID().toString(),
-    username: String,
+    username: String = "king",
 ): Player =
     Player(
         id = id,

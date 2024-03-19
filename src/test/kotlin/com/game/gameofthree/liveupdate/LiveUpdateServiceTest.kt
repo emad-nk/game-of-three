@@ -1,6 +1,6 @@
 package com.game.gameofthree.liveupdate
 
-import com.game.gameofthree.dummyUpdateDTO
+import com.game.gameofthree.dummyGameDTO
 import com.pusher.rest.Pusher
 import com.pusher.rest.data.Result
 import io.mockk.every
@@ -17,18 +17,18 @@ class LiveUpdateServiceTest {
     @Test
     fun `sends message to prefixed channel`() {
         val liveUpdateService = LiveUpdateService(pusher, listOf("prefix"))
-        val updateDTO = dummyUpdateDTO()
+        val gameDTO = dummyGameDTO()
 
-        liveUpdateService.triggerGameUpdate(LiveUpdate("my-channel", "my-event", updateDTO))
+        liveUpdateService.triggerGameUpdate(LiveUpdate("my-channel", "my-event", gameDTO))
 
-        verify(exactly = 1) { pusher.trigger("prefix-my-channel", "my-event", updateDTO) }
+        verify(exactly = 1) { pusher.trigger("prefix-my-channel", "my-event", gameDTO) }
     }
 
     @Test
     fun `does not send message to channel without prefix`() {
         val liveUpdateService = LiveUpdateService(pusher, emptyList())
 
-        liveUpdateService.triggerGameUpdate(LiveUpdate("my-channel", "my-event", dummyUpdateDTO()))
+        liveUpdateService.triggerGameUpdate(LiveUpdate("my-channel", "my-event", dummyGameDTO()))
 
         verify(exactly = 0) { pusher.trigger(any<String>(), any<String>(), any()) }
     }

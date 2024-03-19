@@ -35,6 +35,7 @@ class GameService(
         return game.toDTO()
     }
 
+    @Transactional
     fun move(username: String, gameId: String, value: Int): GameDTO {
         val game = findAPlayingGame(gameId)
         val player = findPlayer(username)
