@@ -29,10 +29,9 @@ class GameService(
         val player = findPlayer(username)
         val existingGame = gameRepository.findOldestGameWithStatusWaiting()
         existingGame?.let {
-            return existingGame.copy(playerTwo = player).toDTO()
+            return gameRepository.save(existingGame.copy(playerTwo = player, status = PLAYING)).toDTO()
         }
-        val game = gameRepository.save(Game(playerOne = player, status = WAITING))
-        return game.toDTO()
+        return gameRepository.save(Game(playerOne = player, status = WAITING)).toDTO()
     }
 
     @Transactional

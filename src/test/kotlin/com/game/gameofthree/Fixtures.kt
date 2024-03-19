@@ -19,7 +19,7 @@ fun dummyGameDTO(
     playerOne: PlayerDTO = dummyPlayer().toDTO(),
     playerTwo: PlayerDTO? = null,
     status: GameStatus = WAITING,
-    lastMove: MoveDTO = dummyMoveDTO(),
+    lastMove: MoveDTO? = dummyMoveDTO(),
     winnerUsername: String? = playerOne.username
 ): GameDTO =
     GameDTO(

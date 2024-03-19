@@ -8,5 +8,5 @@ create table if not exists game
     created_at       timestamp          not null ,
     FOREIGN KEY (player_one_id) REFERENCES player (id),
     FOREIGN KEY (player_two_id) REFERENCES player (id),
-    FOREIGN KEY (winner_id) REFERENCES player (id)
+    FOREIGN KEY (winner_username) REFERENCES player (username)
 );
