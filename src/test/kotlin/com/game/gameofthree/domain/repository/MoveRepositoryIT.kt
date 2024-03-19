@@ -7,6 +7,9 @@ import com.game.gameofthree.dummyPlayer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
 
 class MoveRepositoryIT(
     @Autowired private val moveRepository: MoveRepository,
@@ -24,17 +27,43 @@ class MoveRepositoryIT(
         gameRepository.saveAll(listOf(game1, game2))
 
         moveRepository.save(dummyMove(player = player, game = game1))
-        val move1 = moveRepository.save(dummyMove(player = player, game = game1))
-        val move2 = moveRepository.save(dummyMove(player = player, game = game1))
-        val move3 = moveRepository.save(dummyMove(player = player, game = game1))
+        moveRepository.save(dummyMove(player = player, game = game1))
+        val move = moveRepository.save(dummyMove(player = player, game = game1))
         moveRepository.save(dummyMove(player = player, game = game2))
 
         assertThat(moveRepository.findAll()).hasSize(5)
 
-        val lastThreeMoves = moveRepository.getLastThreeMoves(gameId = game1.id)
+        val lastTMove = moveRepository.getLastMove(gameId = game1.id)
 
-        assertThat(lastThreeMoves).hasSize(3)
-        assertThat(lastThreeMoves).containsExactly(move3, move2, move1)
+        assertThat(lastTMove).isNotNull
+        assertThat(lastTMove).isEqualTo(move)
+    }
+
+    @Test
+    fun `gets all the moves paginated`() {
+        val player = dummyPlayer(username = "king")
+        val game1 = dummyGame(playerOne = player)
+        val game2 = dummyGame(playerOne = player)
+
+        playerRepository.save(player)
+        gameRepository.saveAll(listOf(game1, game2))
+
+        moveRepository.save(dummyMove(player = player, game = game1))
+        moveRepository.save(dummyMove(player = player, game = game1))
+        val move1 = moveRepository.save(dummyMove(player = player, game = game1))
+        val move2 = moveRepository.save(dummyMove(player = player, game = game1))
+        moveRepository.save(dummyMove(player = player, game = game2))
+
+        assertThat(moveRepository.findAll()).hasSize(5)
+
+        val lastMoves = moveRepository
+            .getAllMoves(
+                gameId = game1.id,
+                pageable = PageRequest.of(0, 2, Sort.by(DESC, "timestamp")),
+            )
+
+        assertThat(lastMoves).hasSize(2)
+        assertThat(lastMoves).containsExactly(move2, move1)
     }
 
     @Test

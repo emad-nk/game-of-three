@@ -11,4 +11,4 @@ create table if not exists game
     FOREIGN KEY (winner_username) REFERENCES player (username)
 );
 
-create unique index if not exists created_at_idx on game(created_at);
+create index if not exists created_at_idx on game(created_at);

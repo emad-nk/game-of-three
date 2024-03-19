@@ -1,9 +1,13 @@
 package com.game.gameofthree.service
 
+import com.game.gameofthree.controller.response.MoveDTO
 import com.game.gameofthree.domain.model.Game
 import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.Player
+import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.domain.repository.MoveRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Propagation.REQUIRES_NEW
 import org.springframework.transaction.annotation.Transactional
@@ -23,11 +27,11 @@ class MoveService(
         return moveRepository.save(Move(player = player, value = null, currentResult = initialValue, game = game))
     }
 
-    fun getLastThreeMoves(gameId: String): List<Move> {
-        return moveRepository.getLastThreeMoves(gameId)
-    }
-
     fun getLastMove(gameId: String): Move? {
         return moveRepository.getLastMove(gameId)
+    }
+
+    fun getAllMoves(gameId: String, pageable: Pageable): Page<MoveDTO> {
+        return moveRepository.getAllMoves(gameId, pageable).map { it.toDTO() }
     }
 }

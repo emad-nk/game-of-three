@@ -10,5 +10,5 @@ create table if not exists move
     foreign key (game_id)          references game (id)
 );
 
-create unique index if not exists game_id_idx on move(game_id);
-create unique index if not exists timestamp_idx on move(timestamp);
+create index if not exists game_id_idx on move(game_id);
+create index if not exists timestamp_idx on move(timestamp);
