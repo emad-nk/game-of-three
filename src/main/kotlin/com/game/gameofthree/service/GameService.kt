@@ -14,35 +14,49 @@ import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.domain.repository.GameRepository
 import com.game.gameofthree.exception.EntityNotFoundException
+import com.game.gameofthree.liveupdate.GameEvent
+import com.game.gameofthree.liveupdate.GameEvent.PLAYER_JOINED
+import com.game.gameofthree.liveupdate.GameEvent.PLAYER_MOVED
+import com.game.gameofthree.liveupdate.LiveUpdateService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class GameService(
     private val gameRepository: GameRepository,
     private val moveService: MoveService,
     private val playerService: PlayerService,
+    private val liveUpdateService: LiveUpdateService,
 ) {
 
-    @Transactional
     fun start(username: String): GameDTO {
         val player = findPlayer(username)
         val existingGame = gameRepository.findOldestGameWithStatusWaiting()
-        existingGame?.let {
-            return gameRepository.save(existingGame.copy(playerTwo = player, status = PLAYING)).toDTO()
+        if (existingGame != null) {
+            val gameDTO = gameRepository.save(existingGame.copy(playerTwo = player, status = PLAYING)).toDTO()
+            triggerGameUpdate(gameDTO, PLAYER_JOINED)
+            return gameDTO
         }
-        return gameRepository.save(Game(playerOne = player, status = WAITING)).toDTO()
+        val newGame = Game(playerOne = player, status = WAITING)
+        return gameRepository.save(newGame).toDTO()
     }
 
-    @Transactional
     fun move(username: String, gameId: String, value: Int): GameDTO {
         val game = findAPlayingGame(gameId)
         val player = findPlayer(username)
-        val lastMove = moveService.getLastMove(gameId = gameId)
-        lastMove?.let {
-            return handleNextMove(it, player, value, game)
+        val lastMove = moveService.getLastMove(gameId)
+        return if (lastMove != null) {
+            handleNextMove(lastMove, player, value, game)
+        } else {
+            handleFirstMove(value, player, game)
+        }.also {
+            triggerGameUpdate(it, PLAYER_MOVED)
         }
-        return handleFirstMove(value, player, game)
+    }
+
+    private fun triggerGameUpdate(gameDTO: GameDTO, gameEvent: GameEvent) {
+        liveUpdateService.triggerGameUpdate(gameDTO = gameDTO, gameEvent = gameEvent)
     }
 
     private fun handleFirstMove(value: Int, player: Player, game: Game): GameDTO {

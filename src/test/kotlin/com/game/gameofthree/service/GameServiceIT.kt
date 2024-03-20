@@ -5,16 +5,13 @@ import com.game.gameofthree.domain.model.Game
 import com.game.gameofthree.domain.model.GameStatus.FINISHED
 import com.game.gameofthree.domain.model.GameStatus.PLAYING
 import com.game.gameofthree.domain.model.GameStatus.WAITING
-import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.domain.repository.GameRepository
-import com.game.gameofthree.domain.repository.PlayerRepository
 import com.game.gameofthree.dummyGameDTO
 import com.game.gameofthree.dummyMoveDTO
 import com.game.gameofthree.exception.WrongPlayerException
 import com.game.gameofthree.exception.WrongValueException
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -58,7 +55,7 @@ class GameServiceIT(
         )
         val expectedGameDTO2 = expectedGameDTO1.copy(
             playerTwo = player2.toDTO(),
-            status = PLAYING
+            status = PLAYING,
         )
 
         val gameDTO1 = gameService.start(username = player1.username)
@@ -103,7 +100,7 @@ class GameServiceIT(
         val player2 = playerService.createPlayer("kong")
         val game = gameRepository.save(Game(playerOne = player1, playerTwo = player2, status = PLAYING))
 
-        assertThrows<WrongValueException> {  gameService.move(player1.username, gameId = game.id, value = 2) }
+        assertThrows<WrongValueException> { gameService.move(player1.username, gameId = game.id, value = 2) }
     }
 
     @Test
