@@ -9,7 +9,6 @@ import com.game.gameofthree.domain.model.GameStatus.WAITING
 import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.model.toDTO
-import com.game.gameofthree.liveupdate.UpdateDTO
 import java.time.Instant
 import java.time.Instant.now
 import java.util.UUID.randomUUID
@@ -20,7 +19,7 @@ fun dummyGameDTO(
     playerTwo: PlayerDTO? = null,
     status: GameStatus = WAITING,
     lastMove: MoveDTO? = dummyMoveDTO(),
-    winnerUsername: String? = playerOne.username
+    winner: PlayerDTO? = null
 ): GameDTO =
     GameDTO(
         id = id,
@@ -28,7 +27,7 @@ fun dummyGameDTO(
         playerTwo = playerTwo,
         status = status,
         lastMove = lastMove,
-        winnerUsername = winnerUsername
+        winner = winner
     )
 
 fun dummyMoveDTO(
@@ -62,7 +61,7 @@ fun dummyGame(
     playerOne: Player = dummyPlayer(username = "king"),
     playerTwo: Player? = null,
     status: GameStatus = WAITING,
-    winnerId: String? = null,
+    winner: Player? = null,
     createdAt: Instant = now()
 ): Game =
     Game(
@@ -70,7 +69,7 @@ fun dummyGame(
         playerOne = playerOne,
         playerTwo = playerTwo,
         status = status,
-        winnerUsername = winnerId,
+        winner = winner,
         createdAt = createdAt,
     )
 

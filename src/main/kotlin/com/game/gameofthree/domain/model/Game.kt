@@ -21,7 +21,8 @@ data class Game(
     val playerTwo: Player? = null,
     @Enumerated(STRING)
     val status: GameStatus = WAITING,
-    val winnerUsername: String? = null,
+    @ManyToOne
+    val winner: Player? = null,
     val createdAt: Instant = now()
 )
 
@@ -31,7 +32,7 @@ fun Game.toDTO(lastMove: Move? = null): GameDTO {
         playerOne = playerOne.toDTO(),
         playerTwo = playerTwo?.toDTO(),
         status = status,
-        winnerUsername = winnerUsername,
+        winner = winner?.toDTO(),
         lastMove = lastMove?.toDTO()
     )
 }

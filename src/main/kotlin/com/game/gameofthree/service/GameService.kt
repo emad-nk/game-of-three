@@ -1,5 +1,7 @@
 package com.game.gameofthree.service
 
+import com.game.gameofthree.common.findBestDivisibleBy3
+import com.game.gameofthree.common.getARandomNumberBetweenTwoAndThousand
 import com.game.gameofthree.common.validateIfUserIsAllowedToMove
 import com.game.gameofthree.common.validateInitialValue
 import com.game.gameofthree.common.validateValue
@@ -42,10 +44,24 @@ class GameService(
         return gameRepository.save(newGame).toDTO()
     }
 
-    fun move(username: String, gameId: String, value: Int): GameDTO {
+    fun manualMove(username: String, gameId: String, value: Int): GameDTO {
+        val lastMove = moveService.getLastMove(gameId)
+        return move(username = username, gameId = gameId, value = value, lastMove = lastMove)
+    }
+
+    fun autoMove(username: String, gameId: String): GameDTO {
+        val lastMove = moveService.getLastMove(gameId)
+        if (lastMove != null) {
+            val bestValue = findBestDivisibleBy3(number = lastMove.currentResult)
+            return move(username = username, gameId = gameId, value = bestValue, lastMove = lastMove)
+        }
+        val randomValue = getARandomNumberBetweenTwoAndThousand()
+        return move(username = username, gameId = gameId, value = randomValue, lastMove = lastMove)
+    }
+
+    private fun move(username: String, gameId: String, value: Int, lastMove: Move?): GameDTO {
         val game = findAPlayingGame(gameId)
         val player = findPlayer(username)
-        val lastMove = moveService.getLastMove(gameId)
         return if (lastMove != null) {
             handleNextMove(lastMove, player, value, game)
         } else {
@@ -62,7 +78,7 @@ class GameService(
     private fun handleFirstMove(value: Int, player: Player, game: Game): GameDTO {
         value.validateInitialValue()
         val move = moveService.addFirstMove(player, value, game)
-        return game.updateGameStatus(PLAYING).toDTO(lastMove = move)
+        return game.toDTO(lastMove = move)
     }
 
     private fun handleNextMove(lastMove: Move, player: Player, value: Int, game: Game): GameDTO {
@@ -77,7 +93,7 @@ class GameService(
     }
 
     private fun finishTheGame(game: Game, player: Player, move: Move): GameDTO {
-        return gameRepository.save(game.copy(winnerUsername = player.username, status = FINISHED))
+        return gameRepository.save(game.copy(winner = player, status = FINISHED))
             .toDTO(lastMove = move)
     }
 
