@@ -13,24 +13,25 @@ import org.springframework.transaction.annotation.Propagation.REQUIRES_NEW
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional(rollbackFor = [Exception::class])
 class MoveService(
     private val moveRepository: MoveRepository
 ) {
 
-    @Transactional(propagation = REQUIRES_NEW)
-    fun addMove(player: Player, currentResult: Int, value: Int, game: Game): Move {
-        return moveRepository.save(Move(player = player, value = value, currentResult = currentResult, game = game))
-    }
-
-    @Transactional
     fun addFirstMove(player: Player, initialValue: Int, game: Game): Move {
         return moveRepository.save(Move(player = player, value = null, currentResult = initialValue, game = game))
     }
 
+    fun addMove(player: Player, currentResult: Int, value: Int, game: Game): Move {
+        return moveRepository.save(Move(player = player, value = value, currentResult = currentResult, game = game))
+    }
+
+    @Transactional(readOnly = true)
     fun getLastMove(gameId: String): Move? {
         return moveRepository.getLastMove(gameId)
     }
 
+    @Transactional(readOnly = true)
     fun getAllMoves(gameId: String, pageable: Pageable): Page<MoveDTO> {
         return moveRepository.getAllMoves(gameId, pageable).map { it.toDTO() }
     }

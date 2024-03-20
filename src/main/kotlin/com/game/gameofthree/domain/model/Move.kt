@@ -7,11 +7,12 @@ import jakarta.persistence.ManyToOne
 import java.time.Instant
 import java.time.Instant.now
 import java.util.UUID
+import java.util.UUID.randomUUID
 
 @Entity
 data class Move(
     @Id
-    val id: String = UUID.randomUUID().toString(),
+    val id: String = randomUUID().toString(),
     val value: Int?,
     val currentResult: Int,
     @ManyToOne
