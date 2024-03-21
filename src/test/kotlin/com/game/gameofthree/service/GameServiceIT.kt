@@ -7,8 +7,10 @@ import com.game.gameofthree.domain.model.GameStatus.PLAYING
 import com.game.gameofthree.domain.model.GameStatus.WAITING
 import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.domain.repository.GameRepository
+import com.game.gameofthree.dummyGame
 import com.game.gameofthree.dummyGameDTO
 import com.game.gameofthree.dummyMoveDTO
+import com.game.gameofthree.exception.EntityNotFoundException
 import com.game.gameofthree.exception.WrongPlayerException
 import com.game.gameofthree.exception.WrongValueException
 import org.assertj.core.api.Assertions.assertThat
@@ -25,7 +27,7 @@ class GameServiceIT(
 ) : IntegrationTestParent() {
 
     @Nested
-    inner class PlayingGameManualTests {
+    inner class PlayingManualGameTests {
         @Test
         fun `starts the game when username exists`() {
             val player = playerService.createPlayer("king")
@@ -176,7 +178,7 @@ class GameServiceIT(
     }
 
     @Nested
-    inner class PlayingGameAutomaticTests {
+    inner class PlayingAutomaticGameTests {
         @Test
         fun `player makes move`() {
             val player1 = playerService.createPlayer("king")
@@ -190,7 +192,7 @@ class GameServiceIT(
                 winner = null,
             )
 
-            val gameDTO = gameService.autoMove(player1.username, gameId = game.id)
+            val gameDTO = gameService.automaticMove(player1.username, gameId = game.id)
 
             assertThat(gameDTO)
                 .usingRecursiveComparison()
@@ -213,7 +215,7 @@ class GameServiceIT(
                 winner = null,
             )
 
-            val gameDTO = gameService.autoMove(player2.username, gameId = game.id)
+            val gameDTO = gameService.automaticMove(player2.username, gameId = game.id)
 
             assertThat(gameDTO)
                 .usingRecursiveComparison()
@@ -230,7 +232,7 @@ class GameServiceIT(
             moveService.addMove(player = player2, value = 1, currentResult = 19, game = game)
 
 
-            assertThrows<WrongPlayerException> { gameService.autoMove(player2.username, gameId = game.id) }
+            assertThrows<WrongPlayerException> { gameService.automaticMove(player2.username, gameId = game.id) }
         }
 
         @Test
@@ -248,7 +250,7 @@ class GameServiceIT(
                 winner = player2.toDTO(),
             )
 
-            val gameDTO = gameService.autoMove(player2.username, gameId = game.id)
+            val gameDTO = gameService.automaticMove(player2.username, gameId = game.id)
 
             assertThat(gameDTO)
                 .usingRecursiveComparison()
@@ -256,4 +258,35 @@ class GameServiceIT(
                 .isEqualTo(expectedGameDTO)
         }
     }
+
+    @Nested
+    inner class GetGameTests {
+        @Test
+        fun `gets an existing game`() {
+            val player = playerService.createPlayer("king")
+            val game = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
+            moveService.addFirstMove(player = player, initialValue = 56, game = game)
+            val expectedGameDTO = dummyGameDTO(
+                playerOne = player.toDTO(),
+                playerTwo = null,
+                status = WAITING,
+                lastMove = dummyMoveDTO(value = null, currentResult = 56, player = player.toDTO(), gameId = game.id),
+                winner = null,
+            )
+
+            val gameDTO = gameService.getGame(gameId = game.id)
+
+            assertThat(gameDTO)
+                .usingRecursiveComparison()
+                .ignoringFields("id", "lastMove.id", "lastMove.timestamp")
+                .isEqualTo(expectedGameDTO)
+        }
+
+        @Test
+        fun `throws EntityNotFoundException when game does not exist by id`() {
+            assertThrows<EntityNotFoundException> { gameService.getGame(gameId = "non-existent") }
+        }
+    }
+
+
 }

@@ -7,7 +7,6 @@ import com.game.gameofthree.common.validateInitialValue
 import com.game.gameofthree.common.validateValue
 import com.game.gameofthree.controller.response.GameDTO
 import com.game.gameofthree.domain.model.Game
-import com.game.gameofthree.domain.model.GameStatus
 import com.game.gameofthree.domain.model.GameStatus.FINISHED
 import com.game.gameofthree.domain.model.GameStatus.PLAYING
 import com.game.gameofthree.domain.model.GameStatus.WAITING
@@ -20,6 +19,7 @@ import com.game.gameofthree.liveupdate.GameEvent
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_JOINED
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_MOVED
 import com.game.gameofthree.liveupdate.LiveUpdateService
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -49,14 +49,20 @@ class GameService(
         return move(username = username, gameId = gameId, value = value, lastMove = lastMove)
     }
 
-    fun autoMove(username: String, gameId: String): GameDTO {
+    fun automaticMove(username: String, gameId: String): GameDTO {
         val lastMove = moveService.getLastMove(gameId)
         if (lastMove != null) {
             val bestValue = findBestDivisibleBy3(number = lastMove.currentResult)
             return move(username = username, gameId = gameId, value = bestValue, lastMove = lastMove)
         }
         val randomValue = getARandomNumberBetweenTwoAndThousand()
-        return move(username = username, gameId = gameId, value = randomValue, lastMove = lastMove)
+        return move(username = username, gameId = gameId, value = randomValue, lastMove = null)
+    }
+
+    fun getGame(gameId: String): GameDTO {
+        val game = gameRepository.findByIdOrNull(id = gameId) ?: throw EntityNotFoundException("Game with id $gameId not found")
+        val lastMove = moveService.getLastMove(gameId)
+        return game.toDTO(lastMove = lastMove)
     }
 
     private fun move(username: String, gameId: String, value: Int, lastMove: Move?): GameDTO {
@@ -104,10 +110,6 @@ class GameService(
 
     private fun findPlayer(username: String): Player {
         return playerService.findPlayer(username)
-    }
-
-    private fun Game.updateGameStatus(gameStatus: GameStatus): Game {
-        return gameRepository.save(this.copy(status = gameStatus))
     }
 
     companion object {

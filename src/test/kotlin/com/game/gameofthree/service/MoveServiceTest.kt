@@ -16,7 +16,7 @@ class MoveServiceTest {
     private val moveService = MoveService(moveRepository = moveRepository)
 
     @Test
-    fun `calls the repository save when adding the 1st move`() {
+    fun `calls the repository to save when adding the 1st move`() {
         val player = dummyPlayer()
         val game = dummyGame()
         val move = dummyMove(game = game, player = player)
@@ -28,7 +28,7 @@ class MoveServiceTest {
     }
 
     @Test
-    fun `calls the repository save when adding the 2nd move`() {
+    fun `calls the repository to save when adding the 2nd move`() {
         val player = dummyPlayer()
         val game = dummyGame()
         val move = dummyMove(game = game, player = player)
@@ -40,7 +40,7 @@ class MoveServiceTest {
     }
 
     @Test
-    fun `call the repository to get all moves paginated`() {
+    fun `calls the repository to get all moves paginated`() {
         moveService.getAllMoves(gameId = "game-id", pageable = PageRequest.of(0, 1))
 
         verify(exactly = 1) { moveRepository.getAllMoves(any(), any()) }
