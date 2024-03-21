@@ -7,6 +7,7 @@ import com.game.gameofthree.exception.WrongPlayerException
 import com.game.gameofthree.exception.WrongValueException
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.NOT_FOUND
+import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import java.time.Instant
 import java.time.Instant.now
+import org.postgresql.util.PSQLException
 
 @ControllerAdvice
 class ControllerExceptionHandler {
@@ -76,6 +78,18 @@ class ControllerExceptionHandler {
             message = message(e),
         )
         return ResponseEntity(validationError, BAD_REQUEST)
+    }
+
+    @ResponseBody
+    @ExceptionHandler(PSQLException::class)
+    fun sqlExceptionHandler(e: PSQLException): ResponseEntity<ValidationError> {
+        val validationError = ValidationError(
+            timestamp = now(),
+            status = INTERNAL_SERVER_ERROR.value(),
+            error = INTERNAL_SERVER_ERROR.reasonPhrase,
+            message = e.message ?: "Something went wrong, we are working on it",
+        )
+        return ResponseEntity(validationError, INTERNAL_SERVER_ERROR)
     }
 
     private fun message(e: MethodArgumentNotValidException): String =

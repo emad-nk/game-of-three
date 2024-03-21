@@ -18,6 +18,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
 
 class GameServiceIT(
     @Autowired private val gameService: GameService,
@@ -278,6 +281,23 @@ class GameServiceIT(
                 .usingRecursiveComparison()
                 .ignoringFields("id", "lastMove.id", "lastMove.timestamp")
                 .isEqualTo(expectedGameDTO)
+        }
+
+        @Test
+        fun `gets games by status`() {
+            val player = playerService.createPlayer("king")
+            val game1 = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
+            val game2 = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
+            gameRepository.save(dummyGame(playerOne = player, status = PLAYING))
+
+
+            val games = gameService.getGamesByStatus(
+                status = WAITING.name,
+                pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at"))
+            )
+
+            assertThat(games).hasSize(2)
+            assertThat(games).containsExactly(game2.toDTO(), game1.toDTO())
         }
 
         @Test

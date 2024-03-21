@@ -242,6 +242,36 @@ class GameControllerIT(
     }
 
     @Test
+    fun `gets games by status paginated`() {
+        val player = playerService.createPlayer("king")
+        val game1 = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
+        val game2 = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
+        gameRepository.save(dummyGame(playerOne = player, status = PLAYING))
+
+        val response = given()
+            .contentType(JSON)
+            .`when`()
+            .param("status", "waiting")
+            .param("sort-by", "created_at")
+            .param("page", 0)
+            .param("size", 3)
+            .get("$BASE_URL/games")
+            .then()
+            .log().ifValidationFails()
+            .statusCode(SC_OK)
+            .extract()
+            .body()
+            .asString()
+
+        val result = objectMapper.readValue(
+            response, object : TypeReference<CustomPage<GameDTO>>() {},
+        )
+
+        assertThat(result.content).hasSize(2)
+        assertThat(result.content).containsExactly(game2.toDTO(), game1.toDTO())
+    }
+
+    @Test
     fun `gets a game moves paginated`() {
         val player1 = playerService.createPlayer("king")
         val player2 = playerService.createPlayer("kong")

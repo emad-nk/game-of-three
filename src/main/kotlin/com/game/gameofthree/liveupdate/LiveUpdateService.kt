@@ -1,15 +1,10 @@
 package com.game.gameofthree.liveupdate
 
 import com.game.gameofthree.controller.response.GameDTO
-import com.google.gson.TypeAdapter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonWriter
 import com.pusher.rest.Pusher
 import com.pusher.rest.data.Result.Status.SUCCESS
 import mu.KotlinLogging
 import org.springframework.scheduling.annotation.Async
-import java.io.IOException
-import java.time.Instant
 
 /**
  * Pusher.com based [LiveUpdateService] implementation.
@@ -38,18 +33,5 @@ open class LiveUpdateService(
     companion object {
         private val logger = KotlinLogging.logger {}
         private const val GAME_UPDATE = "game-update-"
-    }
-}
-
-class InstantAdapter : TypeAdapter<Instant>() {
-    @Throws(IOException::class)
-    override fun write(out: JsonWriter, value: Instant) {
-        out.value(value.epochSecond)
-    }
-
-    @Throws(IOException::class)
-    override fun read(`in`: JsonReader): Instant {
-        val seconds = `in`.nextLong()
-        return Instant.ofEpochSecond(seconds)
     }
 }

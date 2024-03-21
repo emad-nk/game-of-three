@@ -19,6 +19,8 @@ import com.game.gameofthree.liveupdate.GameEvent
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_JOINED
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_MOVED
 import com.game.gameofthree.liveupdate.LiveUpdateService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -57,6 +59,10 @@ class GameService(
         }
         val randomValue = getARandomNumberBetweenTwoAndThousand()
         return move(username = username, gameId = gameId, value = randomValue, lastMove = null)
+    }
+
+    fun getGamesByStatus(status: String, pageable: Pageable): Page<GameDTO> {
+        return gameRepository.findGamesByStatus(status = status.uppercase(), pageable).map { it.toDTO() }
     }
 
     fun getGame(gameId: String): GameDTO {

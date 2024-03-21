@@ -91,6 +91,26 @@ class GameController(
         return gameService.getGame(gameId = gameId)
     }
 
+    @GetMapping("games")
+    @Operation(description = "Gets games by status, to avoid having performance issues lastMove is not populated in the result")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Successful"),
+        ],
+    )
+    @ResponseStatus(code = OK)
+    fun getGamesByStatus(
+        @RequestParam status: String,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(value = "sort-by", defaultValue = "created_at") sortBy: String,
+        @RequestParam(value = "sort-order", defaultValue = "desc") sortOrder: String,
+    ): Page<GameDTO> {
+        val direction = if (sortOrder.equals("asc", ignoreCase = true)) Direction.ASC else Direction.DESC
+        val pageable = PageRequest.of(page, size, Sort.by(direction, sortBy))
+        return gameService.getGamesByStatus(status = status, pageable = pageable)
+    }
+
     @GetMapping("moves/{gameId}")
     @Operation(description = "Gets the history of moves related to a specific game")
     @ApiResponses(

@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
 import java.time.Instant.now
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
 
 class GameRepositoryIT(
     @Autowired private val playerRepository: PlayerRepository,
@@ -47,6 +50,25 @@ class GameRepositoryIT(
 
         gameRepository.save(game1.copy(status = FINISHED))
         assertThat(redisTemplate.keys("$PLAYING_GAME_BY_ID*")).isEmpty()
+    }
+
+    @Test
+    fun `finds games by status`() {
+        val player = playerRepository.save(dummyPlayer(username = "king"))
+        val game1 = dummyGame(playerOne = player, status = PLAYING)
+        val game2 = dummyGame(playerOne = player, status = PLAYING)
+        val game3 = dummyGame(playerOne = player, status = WAITING)
+        val game4 = dummyGame(playerOne = player, status = PLAYING)
+
+        gameRepository.saveAll(listOf(game1, game2, game3, game4))
+
+        val games = gameRepository.findGamesByStatus(
+            status = PLAYING.name,
+            pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at"))
+        )
+
+        assertThat(games).hasSize(2)
+        assertThat(games).containsExactly(game4, game2)
     }
 
     @Test
