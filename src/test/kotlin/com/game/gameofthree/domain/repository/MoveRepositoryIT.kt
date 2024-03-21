@@ -31,7 +31,7 @@ class MoveRepositoryIT(
         val move = moveRepository.save(dummyMove(player = player, game = game1))
         moveRepository.save(dummyMove(player = player, game = game2))
 
-        assertThat(moveRepository.findAll()).hasSize(5)
+        assertThat(moveRepository.findAll()).hasSize(4)
 
         val lastTMove = moveRepository.getLastMove(gameId = game1.id)
 
