@@ -36,7 +36,7 @@ pusher:
 
 redis:
   ttl:
-    playing-game-by-d: 10m
+    playing-game-by-id: 10m
     player-by-username: 10m
 
 --- ########################################################################

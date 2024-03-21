@@ -23,7 +23,7 @@ class PlayerService(
         }
     }
 
-    @Cacheable(value = [PLAYER_BY_USERNAME], key = "#{username}")
+    @Cacheable(value = [PLAYER_BY_USERNAME], key = "{#username}")
     fun findPlayer(username: String): Player {
         return playerRepository.findPlayerByUsername(username)
             ?: throw EntityNotFoundException("Player $username not found")

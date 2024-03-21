@@ -31,6 +31,6 @@ interface GameRepository : JpaRepository<Game, String> {
             and id = :id
         """,
     )
-    @Cacheable(value = [PLAYING_GAME_BY_ID], key = "#{id}")
+    @Cacheable(value = [PLAYING_GAME_BY_ID], key = "{#id}", unless = "#result == null")
     fun findAPlayingGame(id: String): Game?
 }

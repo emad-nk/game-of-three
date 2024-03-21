@@ -34,7 +34,7 @@ class RedisConfiguration(val properties: RedisProperties) {
 
 object CacheNames {
     const val PLAYING_GAME_BY_ID = "playing-game-by-id"
-    const val PLAYER_BY_USERNAME = "player-by-user-name"
+    const val PLAYER_BY_USERNAME = "player-by-username"
 
     fun all(): List<String> {
         return this::class.declaredMemberProperties.map { it.getter.call() as String }
