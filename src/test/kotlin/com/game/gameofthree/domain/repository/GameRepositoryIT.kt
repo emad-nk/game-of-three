@@ -10,11 +10,11 @@ import com.game.gameofthree.dummyPlayer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.redis.core.RedisTemplate
-import java.time.Instant.now
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Direction.DESC
+import org.springframework.data.redis.core.RedisTemplate
+import java.time.Instant.now
 
 class GameRepositoryIT(
     @Autowired private val playerRepository: PlayerRepository,
@@ -64,7 +64,7 @@ class GameRepositoryIT(
 
         val games = gameRepository.findGamesByStatus(
             status = PLAYING.name,
-            pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at"))
+            pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at")),
         )
 
         assertThat(games).hasSize(2)

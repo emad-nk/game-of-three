@@ -290,10 +290,9 @@ class GameServiceIT(
             val game2 = gameRepository.save(dummyGame(playerOne = player, status = WAITING))
             gameRepository.save(dummyGame(playerOne = player, status = PLAYING))
 
-
             val games = gameService.getGamesByStatus(
                 status = WAITING.name,
-                pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at"))
+                pageable = PageRequest.of(0, 2, Sort.by(DESC, "created_at")),
             )
 
             assertThat(games).hasSize(2)

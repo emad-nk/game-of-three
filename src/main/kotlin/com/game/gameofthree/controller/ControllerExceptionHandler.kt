@@ -5,9 +5,10 @@ import com.game.gameofthree.exception.DuplicatePlayerException
 import com.game.gameofthree.exception.EntityNotFoundException
 import com.game.gameofthree.exception.WrongPlayerException
 import com.game.gameofthree.exception.WrongValueException
+import org.postgresql.util.PSQLException
 import org.springframework.http.HttpStatus.BAD_REQUEST
-import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import java.time.Instant
 import java.time.Instant.now
-import org.postgresql.util.PSQLException
 
 @ControllerAdvice
 class ControllerExceptionHandler {

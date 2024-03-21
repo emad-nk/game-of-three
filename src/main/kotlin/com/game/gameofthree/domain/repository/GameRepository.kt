@@ -2,7 +2,6 @@ package com.game.gameofthree.domain.repository
 
 import com.game.gameofthree.configuration.CacheNames.PLAYING_GAME_BY_ID
 import com.game.gameofthree.domain.model.Game
-import com.game.gameofthree.domain.model.GameStatus
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
