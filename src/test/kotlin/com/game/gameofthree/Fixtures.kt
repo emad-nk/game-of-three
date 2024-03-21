@@ -1,5 +1,6 @@
 package com.game.gameofthree
 
+import com.game.gameofthree.controller.request.MoveRequestDTO
 import com.game.gameofthree.controller.response.GameDTO
 import com.game.gameofthree.controller.response.MoveDTO
 import com.game.gameofthree.controller.response.PlayerDTO
@@ -45,6 +46,17 @@ fun dummyMoveDTO(
         player = player,
         gameId = gameId,
         timestamp = timestamp
+    )
+
+fun dummyMoveRequestDTO(
+    username: String,
+    gameId: String,
+    value: Int? = null,
+): MoveRequestDTO =
+    MoveRequestDTO(
+        username= username,
+        gameId = gameId,
+        value = value
     )
 
 fun dummyPlayer(

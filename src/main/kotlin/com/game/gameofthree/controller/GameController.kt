@@ -52,7 +52,7 @@ class GameController(
         ],
     )
     @ResponseStatus(code = CREATED)
-    fun makeAManualMove(@RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
+    fun makeAManualMove(@Valid @RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
         return gameService.manualMove(
             username = moveRequestDTO.username,
             gameId = moveRequestDTO.gameId,
@@ -68,7 +68,7 @@ class GameController(
         ],
     )
     @ResponseStatus(code = CREATED)
-    fun makeAnAutomaticMove(@Valid @RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
+    fun makeAnAutomaticMove(@RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
         return gameService.automaticMove(
             username = moveRequestDTO.username,
             gameId = moveRequestDTO.gameId,
