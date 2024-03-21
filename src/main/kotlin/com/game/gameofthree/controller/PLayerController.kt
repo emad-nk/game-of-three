@@ -32,7 +32,7 @@ class PLayerController(
             ApiResponse(responseCode = "400", description = "Bad Request - user already exists"),
         ],
     )
-    @PostMapping()
+    @PostMapping
     @ResponseStatus(code = CREATED)
     fun createPlayer(@RequestBody playerRequestDTO: PlayerRequestDTO): PlayerDTO {
         return playerService.createPlayer(username = playerRequestDTO.username).toDTO()
