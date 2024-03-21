@@ -12,7 +12,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.validation.Valid
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.OK
 import org.springframework.validation.annotation.Validated
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -99,8 +103,13 @@ class GameController(
     @ResponseStatus(code = OK)
     fun getMoves(
         @PathVariable gameId: String,
-        @ParameterObject pageable: Pageable,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
+        @RequestParam(value = "sort-by", defaultValue = "timestamp") sortBy: String,
+        @RequestParam(value = "sort-order", defaultValue = "desc") sortOrder: String
     ): Page<MoveDTO> {
+        val direction = if (sortOrder.equals("asc", ignoreCase = true)) Direction.ASC else Direction.DESC
+        val pageable = PageRequest.of(page, size, Sort.by(direction, sortBy))
         return moveService.getAllMoves(
             gameId = gameId,
             pageable = pageable,
