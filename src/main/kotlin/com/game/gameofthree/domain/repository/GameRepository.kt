@@ -1,10 +1,16 @@
 package com.game.gameofthree.domain.repository
 
+import com.game.gameofthree.configuration.CacheNames.PLAYING_GAME_BY_ID
 import com.game.gameofthree.domain.model.Game
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface  GameRepository : JpaRepository<Game, String>{
+interface GameRepository : JpaRepository<Game, String> {
+
+    @CacheEvict(value = [PLAYING_GAME_BY_ID], key = "{#entity.id}")
+    override fun <S : Game> save(entity: S): S
 
     @Query(
         nativeQuery = true,
@@ -25,5 +31,6 @@ interface  GameRepository : JpaRepository<Game, String>{
             and id = :id
         """,
     )
+    @Cacheable(value = [PLAYING_GAME_BY_ID], key = "#{id}")
     fun findAPlayingGame(id: String): Game?
 }

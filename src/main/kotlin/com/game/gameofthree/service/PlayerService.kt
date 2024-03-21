@@ -1,10 +1,12 @@
 package com.game.gameofthree.service
 
+import com.game.gameofthree.configuration.CacheNames.PLAYER_BY_USERNAME
 import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.repository.PlayerRepository
 import com.game.gameofthree.exception.DuplicatePlayerException
 import com.game.gameofthree.exception.EntityNotFoundException
 import jakarta.validation.ConstraintViolationException
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 
@@ -21,6 +23,7 @@ class PlayerService(
         }
     }
 
+    @Cacheable(value = [PLAYER_BY_USERNAME], key = "#{username}")
     fun findPlayer(username: String): Player {
         return playerRepository.findPlayerByUsername(username)
             ?: throw EntityNotFoundException("Player $username not found")

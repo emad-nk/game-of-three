@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType.STRING
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import java.io.Serializable
 import java.time.Instant
 import java.time.Instant.now
 import java.util.UUID.randomUUID
@@ -23,8 +24,12 @@ data class Game(
     val status: GameStatus = WAITING,
     @ManyToOne
     val winner: Player? = null,
-    val createdAt: Instant = now()
-)
+    val createdAt: Instant = now(),
+) : Serializable {
+    companion object {
+        private const val serialVersionUID = 6498378134993474268L
+    }
+}
 
 fun Game.toDTO(lastMove: Move? = null): GameDTO {
     return GameDTO(
@@ -33,6 +38,6 @@ fun Game.toDTO(lastMove: Move? = null): GameDTO {
         playerTwo = playerTwo?.toDTO(),
         status = status,
         winner = winner?.toDTO(),
-        lastMove = lastMove?.toDTO()
+        lastMove = lastMove?.toDTO(),
     )
 }

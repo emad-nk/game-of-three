@@ -34,6 +34,11 @@ pusher:
   channel-prefixes:
     - got.com
 
+redis:
+  ttl:
+    playing-game-by-d: 10m
+    player-by-username: 10m
+
 --- ########################################################################
 spring.config.activate.on-profile: integration-test
 
