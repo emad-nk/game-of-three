@@ -6,5 +6,5 @@ import com.game.gameofthree.controller.validation.ValidateMoveRequest
 data class MoveRequestDTO(
     val username: String,
     val gameId: String,
-    val value: Int?
+    val value: Int?,
 )

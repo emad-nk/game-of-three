@@ -9,5 +9,4 @@ class GameOfThreeApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }

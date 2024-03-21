@@ -6,10 +6,10 @@ import jakarta.validation.Constraint
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import jakarta.validation.Payload
+import org.springframework.stereotype.Component
 import kotlin.annotation.AnnotationRetention.RUNTIME
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.reflect.KClass
-import org.springframework.stereotype.Component
 
 @Component
 class MoveRequestValidator : ConstraintValidator<ValidateMoveRequest, MoveRequestDTO> {

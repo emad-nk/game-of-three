@@ -149,7 +149,6 @@ class GameServiceIT(
             moveService.addFirstMove(player = player1, initialValue = 56, game = game)
             moveService.addMove(player = player2, value = 1, currentResult = 19, game = game)
 
-
             assertThrows<WrongPlayerException> { gameService.manualMove(player2.username, gameId = game.id, value = 1) }
         }
 
@@ -231,7 +230,6 @@ class GameServiceIT(
             moveService.addFirstMove(player = player1, initialValue = 56, game = game)
             moveService.addMove(player = player2, value = 1, currentResult = 19, game = game)
 
-
             assertThrows<WrongPlayerException> { gameService.automaticMove(player2.username, gameId = game.id) }
         }
 
@@ -287,6 +285,4 @@ class GameServiceIT(
             assertThrows<EntityNotFoundException> { gameService.getGame(gameId = "non-existent") }
         }
     }
-
-
 }

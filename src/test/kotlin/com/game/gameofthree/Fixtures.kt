@@ -20,7 +20,7 @@ fun dummyGameDTO(
     playerTwo: PlayerDTO? = null,
     status: GameStatus = WAITING,
     lastMove: MoveDTO? = dummyMoveDTO(),
-    winner: PlayerDTO? = null
+    winner: PlayerDTO? = null,
 ): GameDTO =
     GameDTO(
         id = id,
@@ -28,7 +28,7 @@ fun dummyGameDTO(
         playerTwo = playerTwo,
         status = status,
         lastMove = lastMove,
-        winner = winner
+        winner = winner,
     )
 
 fun dummyMoveDTO(
@@ -37,7 +37,7 @@ fun dummyMoveDTO(
     currentResult: Int = 56,
     player: PlayerDTO = dummyPlayer().toDTO(),
     gameId: String = randomUUID().toString(),
-    timestamp: Instant = now()
+    timestamp: Instant = now(),
 ): MoveDTO =
     MoveDTO(
         id = id,
@@ -45,7 +45,7 @@ fun dummyMoveDTO(
         currentResult = currentResult,
         player = player,
         gameId = gameId,
-        timestamp = timestamp
+        timestamp = timestamp,
     )
 
 fun dummyMoveRequestDTO(
@@ -54,9 +54,9 @@ fun dummyMoveRequestDTO(
     value: Int? = null,
 ): MoveRequestDTO =
     MoveRequestDTO(
-        username= username,
+        username = username,
         gameId = gameId,
-        value = value
+        value = value,
     )
 
 fun dummyPlayer(
@@ -74,7 +74,7 @@ fun dummyGame(
     playerTwo: Player? = null,
     status: GameStatus = WAITING,
     winner: Player? = null,
-    createdAt: Instant = now()
+    createdAt: Instant = now(),
 ): Game =
     Game(
         id = id,

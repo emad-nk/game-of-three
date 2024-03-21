@@ -60,7 +60,7 @@ abstract class IntegrationTestParent {
         private val ALL_TABLES = listOf(
             "move",
             "game",
-            "player"
+            "player",
         )
     }
 }

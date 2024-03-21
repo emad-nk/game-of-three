@@ -2,22 +2,8 @@ package com.game.gameofthree.controller
 
 import com.game.gameofthree.IntegrationTestParent
 import com.game.gameofthree.controller.ControllerExceptionHandler.ValidationError
-import com.game.gameofthree.controller.request.GameRequestDTO
 import com.game.gameofthree.controller.request.PlayerRequestDTO
-import com.game.gameofthree.controller.response.GameDTO
 import com.game.gameofthree.controller.response.PlayerDTO
-import com.game.gameofthree.controller.validation.MoveRequestValidator.Companion.MOVE_REQUEST_VALIDATION_ERROR
-import com.game.gameofthree.domain.model.GameStatus.PLAYING
-import com.game.gameofthree.domain.model.GameStatus.WAITING
-import com.game.gameofthree.domain.model.Player
-import com.game.gameofthree.domain.model.toDTO
-import com.game.gameofthree.domain.repository.GameRepository
-import com.game.gameofthree.dummyGame
-import com.game.gameofthree.dummyGameDTO
-import com.game.gameofthree.dummyMoveDTO
-import com.game.gameofthree.dummyMoveRequestDTO
-import com.game.gameofthree.service.GameService
-import com.game.gameofthree.service.MoveService
 import com.game.gameofthree.service.PlayerService
 import io.restassured.RestAssured.given
 import io.restassured.http.ContentType.JSON
@@ -92,7 +78,6 @@ class PlayerControllerIT(
 
     @Test
     fun `throws not found exception when getting non-existent player`() {
-
         val response = given()
             .contentType(JSON)
             .`when`()

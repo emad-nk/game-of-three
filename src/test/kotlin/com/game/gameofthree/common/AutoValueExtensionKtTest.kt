@@ -12,9 +12,9 @@ class AutoValueExtensionKtTest {
         "56, 1",
         "3, 0",
         "7, -1",
-        "2, 1"
+        "2, 1",
     )
-    fun `finds the best value to add to the number which divides by 3`(value: Int, bestValue: Int){
+    fun `finds the best value to add to the number which divides by 3`(value: Int, bestValue: Int) {
         assertThat(findBestDivisibleBy3(number = value)).isEqualTo(bestValue)
     }
 

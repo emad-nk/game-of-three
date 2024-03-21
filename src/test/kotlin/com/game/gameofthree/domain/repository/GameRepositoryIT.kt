@@ -7,16 +7,16 @@ import com.game.gameofthree.domain.model.GameStatus.PLAYING
 import com.game.gameofthree.domain.model.GameStatus.WAITING
 import com.game.gameofthree.dummyGame
 import com.game.gameofthree.dummyPlayer
-import java.time.Instant.now
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
+import java.time.Instant.now
 
 class GameRepositoryIT(
     @Autowired private val playerRepository: PlayerRepository,
     @Autowired private val gameRepository: GameRepository,
-    @Autowired private val redisTemplate: RedisTemplate<String, String>
+    @Autowired private val redisTemplate: RedisTemplate<String, String>,
 ) : IntegrationTestParent() {
 
     @Test

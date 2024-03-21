@@ -11,7 +11,7 @@ data class Player(
     @Id
     val id: String = randomUUID().toString(),
     val username: String,
-): Serializable {
+) : Serializable {
     companion object {
         private const val serialVersionUID = 6498378134993474269L
     }

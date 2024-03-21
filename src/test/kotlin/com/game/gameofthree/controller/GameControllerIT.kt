@@ -16,7 +16,6 @@ import com.game.gameofthree.dummyGame
 import com.game.gameofthree.dummyGameDTO
 import com.game.gameofthree.dummyMoveDTO
 import com.game.gameofthree.dummyMoveRequestDTO
-import com.game.gameofthree.service.GameService
 import com.game.gameofthree.service.MoveService
 import com.game.gameofthree.service.PlayerService
 import io.restassured.RestAssured.given
@@ -31,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired
 
 class GameControllerIT(
     @Autowired private val gameRepository: GameRepository,
-    @Autowired private val gameService: GameService,
     @Autowired private val moveService: MoveService,
     @Autowired private val playerService: PlayerService,
     @Autowired private val objectMapper: ObjectMapper,
@@ -52,7 +50,7 @@ class GameControllerIT(
             .contentType(JSON)
             .body(gameRequestDTO)
             .`when`()
-            .post("$BASE_URL/games/starts")
+            .post("$BASE_URL/games")
             .then()
             .log().ifValidationFails()
             .statusCode(SC_CREATED)
@@ -111,7 +109,7 @@ class GameControllerIT(
             .contentType(JSON)
             .body(gameRequestDTO)
             .`when`()
-            .post("$BASE_URL/games/starts")
+            .post("$BASE_URL/games")
             .then()
             .log().ifValidationFails()
             .statusCode(SC_NOT_FOUND)
@@ -255,7 +253,6 @@ class GameControllerIT(
         val move4 = moveService.addMove(player = player1, value = 0, currentResult = 2, game = game)
         val move5 = moveService.addMove(player = player1, value = 1, currentResult = 1, game = game)
 
-
         val response = given()
             .contentType(JSON)
             .`when`()
@@ -268,7 +265,7 @@ class GameControllerIT(
             .statusCode(SC_OK)
             .extract()
             .body()
-            .asString();
+            .asString()
 
         val result = objectMapper.readValue(
             response, object : TypeReference<CustomPage<MoveDTO>>() {},

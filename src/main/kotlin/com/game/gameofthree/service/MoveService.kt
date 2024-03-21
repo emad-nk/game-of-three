@@ -9,13 +9,12 @@ import com.game.gameofthree.domain.repository.MoveRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Propagation.REQUIRES_NEW
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional(rollbackFor = [Exception::class])
 class MoveService(
-    private val moveRepository: MoveRepository
+    private val moveRepository: MoveRepository,
 ) {
 
     fun addFirstMove(player: Player, initialValue: Int, game: Game): Move {

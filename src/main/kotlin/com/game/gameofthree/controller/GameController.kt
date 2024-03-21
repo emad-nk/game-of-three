@@ -10,10 +10,8 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import jakarta.validation.Valid
-import org.springdoc.core.annotations.ParameterObject
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Direction
 import org.springframework.http.HttpStatus.CREATED
@@ -42,7 +40,7 @@ class GameController(
             ApiResponse(responseCode = "201", description = "Created"),
         ],
     )
-    @PostMapping("games/starts")
+    @PostMapping("games")
     @ResponseStatus(code = CREATED)
     fun startAGame(@RequestBody gameRequestDTO: GameRequestDTO): GameDTO {
         return gameService.start(gameRequestDTO.username)
@@ -106,7 +104,7 @@ class GameController(
         @RequestParam(defaultValue = "0") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
         @RequestParam(value = "sort-by", defaultValue = "timestamp") sortBy: String,
-        @RequestParam(value = "sort-order", defaultValue = "desc") sortOrder: String
+        @RequestParam(value = "sort-order", defaultValue = "desc") sortOrder: String,
     ): Page<MoveDTO> {
         val direction = if (sortOrder.equals("asc", ignoreCase = true)) Direction.ASC else Direction.DESC
         val pageable = PageRequest.of(page, size, Sort.by(direction, sortBy))

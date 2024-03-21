@@ -6,7 +6,6 @@ import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import java.time.Instant
 import java.time.Instant.now
-import java.util.UUID
 import java.util.UUID.randomUUID
 
 @Entity

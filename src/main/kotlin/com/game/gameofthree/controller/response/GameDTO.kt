@@ -1,7 +1,6 @@
 package com.game.gameofthree.controller.response
 
 import com.game.gameofthree.domain.model.GameStatus
-import com.game.gameofthree.domain.model.Player
 
 data class GameDTO(
     val id: String,
@@ -9,5 +8,5 @@ data class GameDTO(
     val playerTwo: PlayerDTO?,
     val status: GameStatus,
     val lastMove: MoveDTO?,
-    val winner: PlayerDTO?
+    val winner: PlayerDTO?,
 )

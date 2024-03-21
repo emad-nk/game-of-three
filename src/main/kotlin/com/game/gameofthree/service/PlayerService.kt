@@ -5,7 +5,6 @@ import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.repository.PlayerRepository
 import com.game.gameofthree.exception.DuplicatePlayerException
 import com.game.gameofthree.exception.EntityNotFoundException
-import jakarta.validation.ConstraintViolationException
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
@@ -18,7 +17,7 @@ class PlayerService(
     fun createPlayer(username: String): Player {
         try {
             return playerRepository.save(Player(username = username))
-        } catch (ex: DataIntegrityViolationException){
+        } catch (ex: DataIntegrityViolationException) {
             throw DuplicatePlayerException("A player with the same username $username exists")
         }
     }

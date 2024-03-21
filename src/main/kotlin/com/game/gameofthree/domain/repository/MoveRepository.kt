@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface  MoveRepository : JpaRepository<Move, String> {
+interface MoveRepository : JpaRepository<Move, String> {
 
     @Query(
         nativeQuery = true,
