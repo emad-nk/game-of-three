@@ -42,7 +42,7 @@ To run the application via Maven, run the following commands:
 ./mvnw clean install
 ./mvnw spring-boot:run
 ```
-To run the application locally via intelliJ, add these `VM Options` have to be added to the configuration:
+To run the application locally via intelliJ, add these `VM Options` to the configuration:
 ```
 --add-opens java.base/java.lang=ALL-UNNAMED
 --add-opens java.base/java.time=ALL-UNNAMED
