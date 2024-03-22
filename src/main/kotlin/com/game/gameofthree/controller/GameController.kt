@@ -9,6 +9,7 @@ import com.game.gameofthree.service.MoveService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Validated
 @RequestMapping("/api/v1/")
+@Tag(name = "Game Controller", description = "Creates a game and allows users to make automatic or manual moves")
 class GameController(
     private val gameService: GameService,
     private val moveService: MoveService,
@@ -38,11 +40,12 @@ class GameController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Created"),
+            ApiResponse(responseCode = "404", description = "When user is not found"),
         ],
     )
     @PostMapping("games")
     @ResponseStatus(code = CREATED)
-    fun startAGame(@RequestBody gameRequestDTO: GameRequestDTO): GameDTO {
+    fun startGame(@RequestBody gameRequestDTO: GameRequestDTO): GameDTO {
         return gameService.start(gameRequestDTO.username)
     }
 
@@ -51,10 +54,12 @@ class GameController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Created"),
+            ApiResponse(responseCode = "404", description = "When user is not found"),
+            ApiResponse(responseCode = "400", description = "When user input is not correct"),
         ],
     )
     @ResponseStatus(code = CREATED)
-    fun makeAManualMove(@Valid @RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
+    fun makeManualMove(@Valid @RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
         return gameService.manualMove(
             username = moveRequestDTO.username,
             gameId = moveRequestDTO.gameId,
@@ -67,10 +72,12 @@ class GameController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "201", description = "Created"),
+            ApiResponse(responseCode = "404", description = "When user is not found"),
+            ApiResponse(responseCode = "400", description = "When user input is not correct"),
         ],
     )
     @ResponseStatus(code = CREATED)
-    fun makeAnAutomaticMove(@RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
+    fun makeAutomaticMove(@RequestBody moveRequestDTO: MoveRequestDTO): GameDTO {
         return gameService.automaticMove(
             username = moveRequestDTO.username,
             gameId = moveRequestDTO.gameId,

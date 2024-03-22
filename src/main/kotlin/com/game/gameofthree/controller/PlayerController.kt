@@ -7,6 +7,7 @@ import com.game.gameofthree.service.PlayerService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.OK
 import org.springframework.validation.annotation.Validated
@@ -21,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Validated
 @RequestMapping("/api/v1/players")
-class PLayerController(
+@Tag(name = "Player Controller", description = "Manages users")
+class PlayerController(
     private val playerService: PlayerService,
 ) {
 
@@ -47,7 +49,7 @@ class PLayerController(
     )
     @GetMapping("{username}")
     @ResponseStatus(code = OK)
-    fun startAGame(@PathVariable username: String): PlayerDTO {
+    fun findPlayer(@PathVariable username: String): PlayerDTO {
         return playerService.findPlayer(username = username).toDTO()
     }
 }

@@ -39,7 +39,7 @@ class GameService(
         val existingGame = gameRepository.findOldestGameWithStatusWaiting()
         if (existingGame != null) {
             val gameDTO = gameRepository.save(existingGame.copy(playerTwo = player, status = PLAYING)).toDTO()
-            triggerGameUpdate(gameDTO, PLAYER_JOINED)
+            triggerGameUpdate(gameDTO = gameDTO, gameEvent = PLAYER_JOINED)
             return gameDTO
         }
         val newGame = Game(playerOne = player, status = WAITING)
@@ -62,7 +62,7 @@ class GameService(
     }
 
     fun getGamesByStatus(status: String, pageable: Pageable): Page<GameDTO> {
-        return gameRepository.findGamesByStatus(status = status.uppercase(), pageable).map { it.toDTO() }
+        return gameRepository.findGamesByStatus(status = status.uppercase(), pageable = pageable).map { it.toDTO() }
     }
 
     fun getGame(gameId: String): GameDTO {
@@ -75,11 +75,11 @@ class GameService(
         val game = findAPlayingGame(gameId)
         val player = findPlayer(username)
         return if (lastMove != null) {
-            handleNextMove(lastMove, player, value, game)
+            handleNextMove(lastMove = lastMove, player = player, value = value, game = game)
         } else {
-            handleFirstMove(value, player, game)
+            handleFirstMove(value = value, player = player, game = game)
         }.also {
-            triggerGameUpdate(it, PLAYER_MOVED)
+            triggerGameUpdate(gameDTO = it, gameEvent = PLAYER_MOVED)
         }
     }
 
@@ -99,7 +99,7 @@ class GameService(
         val currentResult = (lastMove.currentResult + value) / 3
         val move = moveService.addMove(player = player, currentResult = currentResult, value = value, game = game)
         if (currentResult == WINNER_VALUE) {
-            return finishTheGame(game, player, move)
+            return finishTheGame(game = game, player = player, move = move)
         }
         return game.toDTO(lastMove = move)
     }
