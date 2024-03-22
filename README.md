@@ -1,4 +1,6 @@
 # Game of Three
+The "Game of Three" is a simple multiplayer arithmetic game where players aim to reach the number 1 through a series of divisions by 3. Players take turns to input a number, which is then divided by 3. The result is rounded to the nearest integer, and the resulting number becomes the next player's input. Players are allowed to input -1, 0, or 1 after the initial input to ensure the game progresses smoothly.
+
 ## Implementation Details
 
 The service is a hybrid of HTTP and Websocket.
