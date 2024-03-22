@@ -1,0 +1,16 @@
+# This is used to start dependencies that are required to run the service or the integration tests locally.
+# To use it, run the start-deps.sh script.
+version: '3'
+services:
+  postgres:
+    image: postgres:14.11-alpine
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:7.0.15-alpine
+    ports:
+      - 6379:6379
