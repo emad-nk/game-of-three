@@ -39,6 +39,10 @@ redis:
     playing-game-by-id: 10m
     player-by-username: 10m
 
+thread-pool:
+  size:
+    game-update: 10
+
 --- ########################################################################
 spring.config.activate.on-profile: integration-test
 

@@ -60,6 +60,7 @@ To run the application locally via intelliJ, add these `VM Options` to the confi
 ## Future Development
 
 - Sending metrics of failures/successes
+- Sending metrics about thread pool capacity
 - More test coverage
 - Workflow diagram
 - Handling when a player gets disconnected

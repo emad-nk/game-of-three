@@ -4,9 +4,9 @@ import com.game.gameofthree.domain.repository.GameRepository
 import com.game.gameofthree.dummyGame
 import com.game.gameofthree.dummyMove
 import com.game.gameofthree.dummyPlayer
+import com.game.gameofthree.event.EventPublisher
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_JOINED
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_MOVED
-import com.game.gameofthree.liveupdate.LiveUpdateService
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,12 +17,12 @@ class GameServiceTest {
     private val gameRepository = mockk<GameRepository>()
     private val moveService = mockk<MoveService>()
     private val playerService = mockk<PlayerService>()
-    private val liveUpdateService = mockk<LiveUpdateService>(relaxed = true)
+    private val eventPublisher = mockk<EventPublisher>(relaxed = true)
     private val gameService = GameService(
         gameRepository = gameRepository,
         moveService = moveService,
         playerService = playerService,
-        liveUpdateService = liveUpdateService,
+        eventPublisher = eventPublisher,
     )
 
     @Test
@@ -33,7 +33,7 @@ class GameServiceTest {
 
         gameService.start(username = "king")
 
-        verify(exactly = 1) { liveUpdateService.triggerGameUpdate(any(), PLAYER_JOINED) }
+        verify(exactly = 1) { eventPublisher.publishUpdateEvent(any(), PLAYER_JOINED) }
     }
 
     @Test
@@ -49,6 +49,6 @@ class GameServiceTest {
 
         gameService.manualMove(username = "king", gameId = game.id, value = 56)
 
-        verify(exactly = 1) { liveUpdateService.triggerGameUpdate(any(), PLAYER_MOVED) }
+        verify(exactly = 1) { eventPublisher.publishUpdateEvent(any(), PLAYER_MOVED) }
     }
 }
