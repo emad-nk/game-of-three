@@ -14,11 +14,11 @@ import com.game.gameofthree.domain.model.Move
 import com.game.gameofthree.domain.model.Player
 import com.game.gameofthree.domain.model.toDTO
 import com.game.gameofthree.domain.repository.GameRepository
+import com.game.gameofthree.event.EventPublisher
 import com.game.gameofthree.exception.EntityNotFoundException
 import com.game.gameofthree.liveupdate.GameEvent
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_JOINED
 import com.game.gameofthree.liveupdate.GameEvent.PLAYER_MOVED
-import com.game.gameofthree.liveupdate.LiveUpdateService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
@@ -31,7 +31,7 @@ class GameService(
     private val gameRepository: GameRepository,
     private val moveService: MoveService,
     private val playerService: PlayerService,
-    private val liveUpdateService: LiveUpdateService,
+    private val eventPublisher: EventPublisher,
 ) {
 
     fun start(username: String): GameDTO {
@@ -84,7 +84,7 @@ class GameService(
     }
 
     private fun triggerGameUpdate(gameDTO: GameDTO, gameEvent: GameEvent) {
-        liveUpdateService.triggerGameUpdate(gameDTO = gameDTO, gameEvent = gameEvent)
+        eventPublisher.publishUpdateEvent(gameDTO = gameDTO, gameEvent = gameEvent)
     }
 
     private fun handleFirstMove(value: Int, player: Player, game: Game): GameDTO {
